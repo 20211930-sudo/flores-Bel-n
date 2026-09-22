@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flores Amarillas para Belén 🌻</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle, #ff69b4, #880e4f);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Tarjeta principal estilo carta */
+    .card {
+      background-color: #fcf8f2;
+      border-radius: 20px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      position: relative;
+      text-align: center;
+      border: 1px solid #f0e6d2;
+    }
+
+    .title {
+      color: #555;
+      font-size: 1.3rem;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+
+    .sub-title {
+      color: #d32f2f;
+      font-size: 1.05rem;
+      font-weight: bold;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    /* Contenedor del árbol en corazón */
+    .tree-container {
+      position: relative;
+      height: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    /* Tronco del árbol */
+    .trunk {
+      width: 22px;
+      height: 80px;
+      background: #6d4c41;
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Follaje con flores amarillas */
+    .heart-foliage {
+      position: absolute;
+      top: 10px;
+      width: 220px;
+      height: 180px;
+    }
+
+    .flower {
+      position: absolute;
+      font-size: 1.1rem;
+      user-select: none;
+      animation: float 3s ease-in-out infinite alternate;
+    }
+
+    /* Sección del contador */
+    .timer-section {
+      text-align: left;
+      border-top: 2px solid #555;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+
+    .timer-title {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+
+    .timer-display {
+      color: #222;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .timer-display span {
+      font-size: 1.2rem;
+      color: #d32f2f;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-4px) rotate(5deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="title">Flores Amarillas 🌻</div>
+    <div class="sub-title">Belén, eres una persona muy especial ✨</div>
+
+    <div class="tree-container">
+      <div class="heart-foliage" id="heartFoliage"></div>
+      <div class="trunk"></div>
+    </div>
+
+    <div class="timer-section">
+      <div class="timer-title">Nuestro tiempo juntos comenzó hace...</div>
+      <div class="timer-display" id="counter">Cargando tiempo...</div>
+    </div>
+  </div>
+
+  <script>
+    // 1. DIBUJAR EL ÁRBOL EN FORMA DE CORAZÓN
+    const container = document.getElementById('heartFoliage');
+    const flowers = ['🌻', '🌼', '💛'];
+
+    function isInsideHeart(x, y) {
+      let nx = (x - 110) / 70;
+      let ny = (100 - y) / 70;
+      let a = nx * nx + ny * ny - 1;
+      return (a * a * a - nx * nx * ny * ny * ny) <= 0;
+    }
+
+    for (let i = 0; i < 220; i++) {
+      let x = Math.random() * 220;
+      let y = Math.random() * 180;
+
+      if (isInsideHeart(x, y)) {
+        let span = document.createElement('span');
+        span.className = 'flower';
+        span.style.left = x + 'px';
+        span.style.top = y + 'px';
+        span.style.animationDelay = (Math.random() * 2) + 's';
+        span.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+        container.appendChild(span);
+      }
+    }
+
+    // 2. CONTADOR EN TIEMPO REAL
+    // Cambia (Año, Mes-1, Día) según la fecha desde la cual quieres empezar a contar
+    // Ejemplo: 21 de Septiembre de 2025 es (2025, 8, 21)
+    const fechaInicio = new Date(2025, 8, 21); 
+
+    function actualizarContador() {
+      const ahora = new Date();
+      const diferencia = ahora - fechaInicio;
+
+      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diferencia / 1000 / 60) % 60);
+      const segundos = Math.floor((diferencia / 1000) % 60);
+
+      document.getElementById('counter').innerHTML = 
+        `<span>${dias}</span> días <span>${horas}</span> horas <span>${minutos}</span> minutos <span>${segundos}</span> segundos`;
+    }
+
+    setInterval(actualizarContador, 1000);
+    actualizarContador();
+  </script>
+
+</body>
+</html>
