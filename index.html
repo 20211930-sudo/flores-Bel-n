@@ -3,215 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flores Amarillas para Belén 🌻</title>
+  <title>Para Belén 🌻</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
-      background-color: #12181b; /* Color mate elegante */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      color: #e0e0e0;
-    }
-
-    /* Tarjeta contenedor de dos columnas */
-    .card-wrapper {
-      background: #1e262c;
-      border: 1px solid #2a343d;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      width: 100%;
-      max-width: 850px;
+      background-color: #1e242b; /* Fondo mate oscuro muy elegante */
+      height: 100vh;
+      width: 100vw;
       display: flex;
       flex-direction: row;
-      overflow: hidden;
-    }
-
-    /* Columna del Ramo (Izquierda/Principal) */
-    .bouquet-section {
-      flex: 1.2;
-      padding: 40px 30px;
-      display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: linear-gradient(180deg, #232d35 0%, #1a2228 100%);
-      border-right: 1px solid #2a343d;
+      overflow: hidden;
+      font-family: 'Georgia', 'Segoe UI', serif;
     }
 
-    h1 {
-      color: #fbc02d;
-      font-size: 1.8rem;
-      margin-bottom: 8px;
+    /* Contenedor de la animación del ramo */
+    .bouquet-container {
+      position: relative;
+      width: 58vw;
+      height: 100vh;
     }
 
-    .subtitle {
-      color: #b0bec5;
-      font-size: 1rem;
-      margin-bottom: 25px;
+    canvas {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    /* Ilustración de Ramo de Girasoles */
-    .bouquet-svg {
-      width: 100%;
-      max-width: 260px;
-      height: auto;
-      filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.4));
-      animation: float 4s ease-in-out infinite alternate;
-    }
-
-    /* Columna de Frases (Derecha) */
-    .phrases-section {
-      flex: 1;
-      padding: 40px 30px;
+    /* Contenedor del mensaje al costado */
+    .card-container {
+      width: 42vw;
+      height: 100vh;
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      gap: 18px;
-      background: #192026;
+      align-items: center;
+      padding-right: 4vw;
     }
 
-    .phrase-card {
-      background: rgba(255, 255, 255, 0.03);
-      border-left: 4px solid #fbc02d;
-      padding: 16px 20px;
-      border-radius: 0 12px 12px 0;
-      transition: transform 0.3s ease, background 0.3s ease;
+    .message-card {
+      background: #28313a;
+      border: 1px solid #3a4652;
+      padding: 40px 35px;
+      border-radius: 24px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      color: #e0e6ed;
+      max-width: 420px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 2.5s ease-out, transform 2.5s ease-out;
     }
 
-    .phrase-card:hover {
-      transform: translateX(5px);
-      background: rgba(255, 255, 255, 0.06);
+    .message-card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .phrase-card p {
-      font-size: 0.98rem;
-      line-height: 1.5;
-      color: #d1d5db;
-    }
-
-    .highlight {
-      color: #fbc02d;
+    .message-card h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #f7d070;
       font-weight: 600;
+      line-height: 1.3;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); }
-      100% { transform: translateY(-8px) rotate(2deg); }
+    .message-card p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 18px;
     }
 
-    /* Responsive para teléfonos */
+    .message-card .highlight {
+      color: #f7d070;
+      font-weight: 500;
+    }
+
+    .message-card .signature {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #3a4652;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #f7d070;
+      text-align: right;
+    }
+
     @media (max-width: 768px) {
-      .card-wrapper {
+      body {
         flex-direction: column;
       }
-      .bouquet-section {
-        border-right: none;
-        border-bottom: 1px solid #2a343d;
-        padding: 30px 20px;
+      .bouquet-container {
+        width: 100vw;
+        height: 55vh;
       }
-      .phrases-section {
-        padding: 30px 20px;
+      .card-container {
+        width: 100vw;
+        height: 45vh;
+        padding-right: 0;
+        padding: 20px;
+      }
+      .message-card {
+        padding: 25px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="card-wrapper">
-    
-    <!-- LADO IZQUIERDO: RAMO DE GIRASOLES -->
-    <div class="bouquet-section">
-      <h1>Flores Amarillas 🌻</h1>
-      <p class="subtitle">Especialmente para ti, Belén</p>
-      
-      <!-- Ramo de Girasoles Vectorial -->
-      <svg class="bouquet-svg" viewBox="0 0 300 380" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Envoltorio y lazo -->
-        <path d="M110 240 L190 240 L170 360 L130 360 Z" fill="#d7ccc8" />
-        <path d="M80 180 L220 180 L190 250 L110 250 Z" fill="#efebe9" />
-        <path d="M135 240 Q150 250 165 240 Q175 255 160 260 Q150 250 140 260 Z" fill="#fbc02d" />
-        
-        <!-- Hojas -->
-        <path d="M70 160 Q100 130 110 170 Z" fill="#388e3c" />
-        <path d="M230 160 Q200 130 190 170 Z" fill="#2e7d32" />
-        <path d="M120 120 Q150 90 160 140 Z" fill="#43a047" />
-
-        <!-- Girasol Centro -->
-        <g transform="translate(150, 130)">
-          <!-- Pétalos -->
-          <circle cx="0" cy="-45" r="12" fill="#fbc02d" />
-          <circle cx="32" cy="-32" r="12" fill="#fbc02d" />
-          <circle cx="45" cy="0" r="12" fill="#fbc02d" />
-          <circle cx="32" cy="32" r="12" fill="#fbc02d" />
-          <circle cx="0" cy="45" r="12" fill="#fbc02d" />
-          <circle cx="-32" cy="32" r="12" fill="#fbc02d" />
-          <circle cx="-45" cy="0" r="12" fill="#fbc02d" />
-          <circle cx="-32" cy="-32" r="12" fill="#fbc02d" />
-          <!-- Centro café -->
-          <circle cx="0" cy="0" r="28" fill="#5d4037" />
-          <circle cx="0" cy="0" r="22" fill="#4e342e" />
-        </g>
-
-        <!-- Girasol Izquierdo -->
-        <g transform="translate(100, 160) scale(0.8)">
-          <circle cx="0" cy="-45" r="12" fill="#fdd835" />
-          <circle cx="32" cy="-32" r="12" fill="#fdd835" />
-          <circle cx="45" cy="0" r="12" fill="#fdd835" />
-          <circle cx="32" cy="32" r="12" fill="#fdd835" />
-          <circle cx="0" cy="45" r="12" fill="#fdd835" />
-          <circle cx="-32" cy="32" r="12" fill="#fdd835" />
-          <circle cx="-45" cy="0" r="12" fill="#fdd835" />
-          <circle cx="-32" cy="-32" r="12" fill="#fdd835" />
-          <circle cx="0" cy="0" r="28" fill="#5d4037" />
-        </g>
-
-        <!-- Girasol Derecho -->
-        <g transform="translate(200, 160) scale(0.8)">
-          <circle cx="0" cy="-45" r="12" fill="#fdd835" />
-          <circle cx="32" cy="-32" r="12" fill="#fdd835" />
-          <circle cx="45" cy="0" r="12" fill="#fdd835" />
-          <circle cx="32" cy="32" r="12" fill="#fdd835" />
-          <circle cx="0" cy="45" r="12" fill="#fdd835" />
-          <circle cx="-32" cy="32" r="12" fill="#fdd835" />
-          <circle cx="-45" cy="0" r="12" fill="#fdd835" />
-          <circle cx="-32" cy="-32" r="12" fill="#fdd835" />
-          <circle cx="0" cy="0" r="28" fill="#5d4037" />
-        </g>
-      </svg>
-    </div>
-
-    <!-- LADO DERECHO: FRASES BONITAS -->
-    <div class="phrases-section">
-      
-      <div class="phrase-card">
-        <p><span class="highlight">Belén</span>, eres una persona muy especial que ilumina el día de quienes te rodean. ✨</p>
-      </div>
-
-      <div class="phrase-card">
-        <p>Como los girasoles buscan el sol, tu presencia siempre trae <span class="highlight">luz, alegría y buena vibra</span>. 🌻</p>
-      </div>
-
-      <div class="phrase-card">
-        <p>Nunca olvides lo valiosa e increíble que eres. ¡Que tengas un día <span class="highlight">lleno de momentos bonitos</span>! 💛</p>
-      </div>
-
-      <div class="phrase-card">
-        <p>Un pequeño detalle para recordarte lo mucho que se te aprecia. 💐</p>
-      </div>
-
-    </div>
-
+  <div class="bouquet-container">
+    <canvas id="bouquetCanvas"></canvas>
   </div>
 
+  <div class="card-container">
+    <div class="message-card" id="card">
+      <h1>¡Feliz inicio de la Primavera, Belén! 🌻</h1>
+      <p>Que esta nueva temporada llene tu vida de luz, calidez y la misma alegría brillante con la que florece este ramo de girasoles.</p>
+      <p>Nunca olvides lo extraordinaria y valiosa que eres. Sigue buscando siempre la luz del sol, creciendo con gracia y fortaleza.</p>
+      <p class="highlight">Cuídate mucho siempre.</p>
+      <div class="signature">Con mucho cariño, Belén ✨</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('bouquetCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.querySelector('.bouquet-container');
+
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+
+    let stemProgress = 0;
+    let ribbonProgress = 0;
+    let flowers = [];
+
+    // Base del ramo (punto de atado de la cinta)
+    const baseX = canvas.width / 2;
+    const baseY = canvas.height * 0.72;
+
+    // Configuración de los girasoles del ramo
+    const flowerConfigs = [
+      // Centro superior
+      { xOffset: 0, yOffset: -180, maxSize: 32, delay: 40 },
+      { xOffset: -45, yOffset: -150, maxSize: 28, delay: 55 },
+      { xOffset: 45, yOffset: -150, maxSize: 28, delay: 55 },
+      // Capa media
+      { xOffset: -85, yOffset: -110, maxSize: 26, delay: 70 },
+      { xOffset: 0, yOffset: -105, maxSize: 30, delay: 65 },
+      { xOffset: 85, yOffset: -110, maxSize: 26, delay: 70 },
+      // Lateral y frontal
+      { xOffset: -120, yOffset: -65, maxSize: 24, delay: 85 },
+      { xOffset: -40, yOffset: -60, maxSize: 27, delay: 80 },
+      { xOffset: 40, yOffset: -60, maxSize: 27, delay: 80 },
+      { xOffset: 120, yOffset: -65, maxSize: 24, delay: 85 },
+      // Inferiores cerrando el ramo
+      { xOffset: -75, yOffset: -20, maxSize: 22, delay: 95 },
+      { xOffset: 0, yOffset: -25, maxSize: 25, delay: 90 },
+      { xOffset: 75, yOffset: -20, maxSize: 22, delay: 95 }
+    ];
+
+    class BouquetFlower {
+      constructor(targetX, targetY, maxSize, delay) {
+        this.baseX = baseX;
+        this.baseY = baseY;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.maxSize = maxSize;
+        this.currentSize = 0;
+        this.delay = delay;
+        this.petals = 14 + Math.floor(Math.random() * 4);
+        this.angle = (Math.random() - 0.5) * 0.4;
+        this.rotationSpeed = 0.003 + Math.random() * 0.003;
+      }
+
+      update(frame) {
+        if (frame < this.delay) return;
+
+        // Florecimiento
+        if (this.currentSize < this.maxSize) {
+          this.currentSize += 0.35;
+        }
+
+        this.angle += this.rotationSpeed;
+      }
+
+      drawStems(frame) {
+        if (frame < 10) return;
+
+        // Dibujar el tallo largo desde la base hacia la flor
+        let currentStemProgress = Math.min(1, (frame - 10) / (this.delay - 5));
+        if (currentStemProgress <= 0) return;
+
+        let endX = this.baseX + (this.targetX - this.baseX) * currentStemProgress;
+        let endY = this.baseY + (this.targetY - this.baseY) * currentStemProgress;
+
+        ctx.beginPath();
+        ctx.moveTo(this.baseX, this.baseY + 80); // Extensión inferior de tallos
+        ctx.quadraticCurveTo(this.baseX, this.baseY, endX, endY);
+        ctx.strokeStyle = '#3a5a24'; // Verde natural de los tallos
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+
+      drawFlower() {
+        if (this.currentSize < 1) return;
+
+        ctx.save();
+        ctx.translate(this.targetX, this.targetY);
+        ctx.rotate(this.angle);
+
+        // Hojas verdes detrás de la flor
+        ctx.fillStyle = '#2e4a1c';
+        for (let i = 0; i < 5; i++) {
+          ctx.beginPath();
+          ctx.rotate((Math.PI * 2) / 5);
+          ctx.ellipse(0, this.currentSize * 0.9, this.currentSize * 0.3, this.currentSize * 0.6, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Pétalos amarillos brillantes
+        ctx.fillStyle = '#f7b71d';
+        for (let i = 0; i < this.petals; i++) {
+          ctx.beginPath();
+          ctx.rotate((Math.PI * 2) / this.petals);
+          ctx.ellipse(0, this.currentSize * 0.85, this.currentSize * 0.28, this.currentSize * 0.85, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Capa interna de pétalos cálidos
+        ctx.fillStyle = '#e0980d';
+        for (let i = 0; i < this.petals; i++) {
+          ctx.beginPath();
+          ctx.rotate((Math.PI * 2) / this.petals);
+          ctx.ellipse(0, this.currentSize * 0.6, this.currentSize * 0.2, this.currentSize * 0.6, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Centro oscuro del girasol
+        ctx.beginPath();
+        ctx.arc(0, 0, this.currentSize * 0.42, 0, Math.PI * 2);
+        ctx.fillStyle = '#3a2112';
+        ctx.fill();
+
+        // Textura del centro
+        ctx.beginPath();
+        ctx.arc(0, 0, this.currentSize * 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = '#27150a';
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    // Inicializar girasoles
+    flowerConfigs.forEach(cfg => {
+      flowers.push(new BouquetFlower(baseX + cfg.xOffset, baseY + cfg.yOffset, cfg.maxSize, cfg.delay));
+    });
+
+    // Dibujar la lazo/cinta elegante atando el ramo
+    function drawRibbon(frame) {
+      if (frame < 35) return;
+      if (ribbonProgress < 1) ribbonProgress += 0.03;
+
+      ctx.save();
+      ctx.translate(baseX, baseY);
+
+      let scale = ribbonProgress;
+
+      // Nudo central de la cinta
+      ctx.beginPath();
+      ctx.arc(0, 0, 14 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#c0392b'; // Rojo elegante
+      ctx.fill();
+
+      // Lazos laterales
+      ctx.beginPath();
+      ctx.ellipse(-22 * scale, -5 * scale, 22 * scale, 12 * scale, -Math.PI / 6, 0, Math.PI * 2);
+      ctx.ellipse(22 * scale, -5 * scale, 22 * scale, 12 * scale, Math.PI / 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#d9534f';
+      ctx.fill();
+
+      // Caídas del lazo
+      ctx.beginPath();
+      ctx.moveTo(-5 * scale, 10 * scale);
+      ctx.lineTo(-25 * scale, 60 * scale);
+      ctx.lineTo(-10 * scale, 60 * scale);
+      ctx.lineTo(0, 10 * scale);
+      ctx.fillStyle = '#b02a1e';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(5 * scale, 10 * scale);
+      ctx.lineTo(25 * scale, 60 * scale);
+      ctx.lineTo(10 * scale, 60 * scale);
+      ctx.lineTo(0, 10 * scale);
+      ctx.fillStyle = '#b02a1e';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    let frame = 0;
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      frame++;
+
+      // 1. Dibujar tallos
+      flowers.forEach(f => f.drawStems(frame));
+
+      // 2. Dibujar cinta
+      drawRibbon(frame);
+
+      // 3. Dibujar girasoles floreciendo
+      flowers.forEach(f => {
+        f.update(frame);
+        f.drawFlower();
+      });
+
+      // Muestra la tarjeta del mensaje cuando el ramo esté formado
+      if (frame > 120) {
+        document.getElementById('card').classList.add('visible');
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+    });
+  </script>
 </body>
 </html>
